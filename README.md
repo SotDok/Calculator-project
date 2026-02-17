@@ -22,4 +22,5 @@ Example:
 Open `index.html` in a browser to use.
 
 
-<img width="503" height="750" alt="image" src="https://github.com/user-attachments/assets/609130ec-1c47-40c2-bb55-368337a026c4" />
+<img width="477" height="737" alt="image" src="https://github.com/user-attachments/assets/ef8e7fbd-8391-4fe0-9387-17123ed5197d" />
+
