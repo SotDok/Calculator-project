@@ -199,26 +199,40 @@ deleteLastNumberButton.addEventListener('click', () => {
 
 //Keyboard event listener for digits, operators, enter, backspace, and escape
 document.addEventListener('keydown', (event) => {
-    if (event.key >= '0' && event.key <= '9') appendDigit(event.key);
-    if (event.key === '.') {
-        if (!currentNumber.includes('.')) appendDigit('.');
+    if (event.key >= '0' && event.key <= '9'){
+     appendDigit(event.key);
+     return;
     }
-    if (['+', '-', '*', '/'].includes(event.key)) chooseOperation(event.key);
-    if (event.key === 'Enter' || event.key === '=') calculate();
+     if (event.key === '.') {
+        if (!currentNumber.includes('.')) appendDigit('.');
+        return;
+    }
+    if (['+', '-', '*', '/'].includes(event.key)) {
+        chooseOperation(event.key);
+        return;
+    }
+    if (event.key === 'Enter' || event.key === '=') {
+             calculate();
+             return;
+    }
     if (event.key === 'Backspace') {
         if (currentNumber.length > 1) {
             currentNumber = currentNumber.slice(0, -1);
         } else {
             currentNumber = '0';
         }
+        formula = operator ? `${previousNumber} ${operator} ${currentNumber}` : currentNumber;
         updateDisplay();
+        return;
     }
     if (event.key === "Escape") {
         currentNumber = '0';
         previousNumber = null; 
         operator = null;
         shouldResetDisplay = false;
+        formula = currentNumber;
         updateDisplay();
+        return;
     }
 });
 
