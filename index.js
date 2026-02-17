@@ -128,9 +128,9 @@ function updateDisplay() {
         const previous = parts[0].trim(); 
         const result = parts[1].trim();   
         activeNumbersContainer.innerHTML = `
-            <span style="font-size: 18px; color: #f0f0f0;">${previous}</span>
+            <span style="font-size: 18px; color: #f0f0f0;"> ${previous} </span>
             <br>
-            <span style="font-size: 28px; color: white;">= ${result}</span>
+            <span style="font-size: 28px; color: white; margin-left: 5px"> = ${result}</span>
         `;
     } else {
         activeNumbersContainer.textContent = formula || currentNumber;
@@ -287,7 +287,7 @@ allButtons.forEach(button => {
 
     // Hover effect
     button.addEventListener('mouseenter', () => {
-        button.style.backgroundColor = '#d5d5d5';
+        button.style.backgroundColor = '#6c6a6a';
     });
 
     button.addEventListener('mouseleave', () => {
