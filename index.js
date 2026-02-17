@@ -11,6 +11,8 @@ container.id = 'container';
 container.style.cssText = 'display: flex; flex-direction: column; align-items: center; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);';
 body.appendChild(container);
 
+
+// Create display for active numbers and formula
 const activeNumbersContainer = document.createElement('div');
 activeNumbersContainer.style.cssText = `
     width: 100%;
@@ -27,6 +29,7 @@ activeNumbersContainer.style.cssText = `
 `;
 container.appendChild(activeNumbersContainer);
 
+// Create container for number and operator buttons
 const numbersContainer = document.createElement('div');
 numbersContainer.style.cssText = `
     display: grid;
@@ -36,6 +39,8 @@ numbersContainer.style.cssText = `
 `;
 container.appendChild(numbersContainer);
 
+//Hardcoding number buttons and operator buttons, appending them to the numbers container. Probably could be done
+// more efficiently with a loop but this is fine for now and I want to move on to the logic of the calculator
 const number1 = document.createElement('button');
 number1.textContent = '1';
 numbersContainer.appendChild(number1);
@@ -114,7 +119,7 @@ let currentNumber = '0';
 let previousNumber = null;
 let operator = null;
 let shouldResetDisplay = false;
-let formula = '';
+let formula = ''; //Need the formula as a placeholder in display for the previous operation
 
 //Function to update the display with the current number
 function updateDisplay() {
@@ -241,6 +246,7 @@ function calculate() {
     const curr = parseFloat(currentNumber);
     let result;
 
+    // Used switch conditional because of repetitive action
     switch (operator) {
         case '+': result = prev + curr; break;
         case '-': result = prev - curr; break;
@@ -303,7 +309,7 @@ allButtons.forEach(button => {
     button.style.color = 'white';
 });
 
-// Προαιρετικά: hover effect για operators
+// Hover effect for operator and equals buttons
 [addButton, subtractButton, multiplyButton, divideButton, equalsButton].forEach(button => {
     button.addEventListener('mouseenter', () => {
         button.style.backgroundColor = '#9d4c00';
