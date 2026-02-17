@@ -1,17 +1,20 @@
 const body = document.querySelector('body');
 body.style.cssText = 'display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f0f0;';
 const container = document.createElement('div');
-container.div = 'container';
+container.id = 'container';
 container.style.cssText = 'display: flex; flex-direction: column; align-items: center; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);';
 body.appendChild(container);
 
 const activeNumbersContainer = document.createElement('div');
-activeNumbersContainer.textContent = '0';
-activeNumbersContainer.style.cssText = 'width: 100%; height: 50px; background-color: #e0e0e0; display: flex; align-items: center; justify-content: flex-end; padding: 10px; font-size: 24px; border-radius: 5px; margin-bottom: 20px;';
 container.appendChild(activeNumbersContainer);
 
-
 const numbersContainer = document.createElement('div');
+numbersContainer.style.cssText = `
+    display: grid;
+    grid-template-columns: repeat(4, 70px);
+    gap: 10px;
+    margin-top: 20px;
+`;
 container.appendChild(numbersContainer);
 
 const number1 = document.createElement('button');
@@ -87,11 +90,10 @@ equalsButton.textContent = '=';
 numbersContainer.appendChild(equalsButton);
 
 
-
 //State 
 let currentNumber = '0';
 let previousNumber = null;
-let operation = null;
+let operator = null;
 let shouldResetDisplay = false;
 
 function updateDisplay() {
@@ -102,23 +104,37 @@ updateDisplay();
 
 //Function to append digit to the current number
 function appendDigit(digit) {
-    if (shouldResetDisplay){
-        currentValue = digit;
+    if (shouldResetDisplay) {
+        currentNumber = digit;
         shouldResetDisplay = false;
     } else {
-        if (currentNumber === '0') {
-            currentNumber = digit;
-        } else {
-            currentNumber += digit;
-        }
+        currentNumber = currentNumber === '0'
+            ? digit
+            : currentNumber + digit;
     }
+
     updateDisplay();
 }
 
 //Function to add event listeners to number buttons if key clicked or pressed from keyboard
 document.addEventListener('keydown', (event) => {
-    if (event.key >= '0' && event.key <= '9') {
-        appendDigit(event.key);
+    if (event.key >= '0' && event.key <= '9') appendDigit(event.key);
+    if (['+', '-', '*', '/'].includes(event.key)) chooseOperation(event.key);
+    if (event.key === 'Enter' || event.key === '=') calculate();
+    if (event.key === 'Backspace') {
+        if (currentNumber.length > 1) {
+            currentNumber = currentNumber.slice(0, -1);
+        } else {
+            currentNumber = '0';
+        }
+        updateDisplay();
+    }
+    if (event.key === "Escape") {
+        currentNumber = '0';
+        previousNumber = null; 
+        operator = null;
+        shouldResetDisplay = false;
+        updateDisplay();
     }
 });
 
@@ -133,11 +149,43 @@ number8.addEventListener('click', () => appendDigit('8'));
 number9.addEventListener('click', () => appendDigit('9'));
 number0.addEventListener('click', () => appendDigit('0'));
 
+//Function to choose operation
 function chooseOperation(op) {
-    if (operator !== null) {
+    if (operator !== null && !shouldResetDisplay) {
         calculate();
     }
+
     previousNumber = currentNumber;
     operator = op;
     shouldResetDisplay = true;
+
+    updateDisplay();
 }
+
+//Function to calculate the result based on the operator and update the display
+function calculate() {
+    if (operator === null || previousNumber === null) return;
+
+    const prev = parseFloat(previousNumber);
+    const curr = parseFloat(currentNumber);
+    let result;
+
+    switch (operator) {
+        case '+': result = prev + curr; break;
+        case '-': result = prev - curr; break;
+        case '*': result = prev * curr; break;
+        case '/': result = prev / curr; break;
+    }
+
+    currentNumber = result.toString();
+    operator = null;
+    previousNumber = null;
+    shouldResetDisplay = true;
+
+    updateDisplay();
+}
+
+equalsButton.addEventListener('click', calculate);
+
+
+
