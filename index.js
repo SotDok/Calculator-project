@@ -2,7 +2,7 @@ const body = document.querySelector('body');
 body.style.cssText = 'display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f0f0;';
 
 const title = document.createElement('h1');
-title.textContent = 'Calculator to check how poor u are at the end of the month :(';
+title.textContent = 'Calculator';
 title.style.cssText = 'position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-family: Arial, sans-serif; color: #333;';
 body.appendChild(title);
 
