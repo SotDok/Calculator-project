@@ -20,3 +20,7 @@ Example:
 
 ## Open
 Open `index.html` in a browser to use.
+
+
+<img width="477" height="737" alt="image" src="https://github.com/user-attachments/assets/ef8e7fbd-8391-4fe0-9387-17123ed5197d" />
+
