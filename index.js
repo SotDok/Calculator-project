@@ -127,14 +127,28 @@ function updateDisplay() {
         const parts = formula.split('=');
         const previous = parts[0].trim(); 
         const result = parts[1].trim();   
-        activeNumbersContainer.innerHTML = `
-            <span style="font-size: 18px; color: #f0f0f0;"> ${previous} </span>
-            <br>
-            <span style="font-size: 28px; color: white; margin-left: 5px"> = ${result}</span>
-        `;
+
+        activeNumbersContainer.innerHTML = '';
+
+        let previousSpan = document.createElement("span");
+        previousSpan.style.cssText = "font-size: 18px; color: #f0f0f0; ";
+        previousSpan.textContent = previous;
+
+        let resultSpan = document.createElement('span');
+        resultSpan.style.cssText = "font-size: 28px; margin-left: 5px; color: #f0f0f0;"
+        resultSpan.textContent = ` = ${result}`;
+
+        activeNumbersContainer.appendChild(previousSpan);
+        activeNumbersContainer.appendChild(document.createElement("br"));
+        activeNumbersContainer.appendChild(resultSpan);
+        
     } else {
-        activeNumbersContainer.textContent = formula || currentNumber;
-    }
+        if (formula !== ""){
+            activeNumbersContainer.textContent = formula;
+        } else {
+            activeNumbersContainer.textContent = currentNumber;
+        }
+    }  
 }
 
 updateDisplay();
@@ -145,10 +159,18 @@ function appendDigit(digit) {
         currentNumber = digit;
         shouldResetDisplay = false;
     } else {
-        currentNumber = currentNumber === '0' ? digit : currentNumber + digit;
+        if (currentNumber === '0'){
+            currentNumber = digit;
+        } else {
+            currentNumber = currentNumber + digit;
+        }
     }
 
-    formula = operator ? `${previousNumber} ${operator} ${currentNumber}` : currentNumber;
+    if (operator !== null){
+        formula = `${previousNumber} ${operator} ${currentNumber}`;
+    } else {
+        formula = currentNumber;
+    }
     updateDisplay();
 }
 
@@ -183,15 +205,22 @@ clearButton.addEventListener('click', () => {
     previousNumber = null;
     operator = null;
     shouldResetDisplay = false;
+    formula = '';
     updateDisplay();
 });
 
 // Delete last number button
 deleteLastNumberButton.addEventListener('click', () => {
     if (currentNumber.length > 1) {
-        currentNumber = currentNumber.slice(0, -1);
+        currentNumber = currentNumber.slice(0, currentNumber.length -1);
     } else {
         currentNumber = '0';
+    }
+
+    if (operator !== null) {
+        formula = `${previousNumber} ${operator} ${currentNumber}`;
+    } else {
+        formula = currentNumber;
     }
     updateDisplay();
 });
@@ -262,10 +291,14 @@ function calculate() {
 
     // Used switch conditional because of repetitive action
     switch (operator) {
-        case '+': result = prev + curr; break;
-        case '-': result = prev - curr; break;
-        case '*': result = prev * curr; break;
-        case '/': result = prev / curr; break;
+        case '+': result = prev + curr;
+         break;
+        case '-': result = prev - curr;
+         break;
+        case '*': result = prev * curr;
+         break;
+        case '/': result = prev / curr; 
+         break;
     }
 
     formula = `${previousNumber} ${operator} ${currentNumber} = ${result}`;
